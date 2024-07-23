@@ -1,14 +1,15 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Nullable
-from flask_restful import Resource, Api, reqparse, fields, marshal_with,abort 
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
-db = SQLAlchemy(app)
-api = Api(app) 
+from init import  db, ma, bcrypt, jwt
 
-#classes id, username, email, boards
+def create_app():
+    app = Flask(__name__)
+
+    app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql+psycopg2://"
+    
+
+
+# classes id, username, email, boards
 
 #define UserModel class
 class UserModel(db.Model):

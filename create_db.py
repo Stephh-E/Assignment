@@ -1,4 +1,4 @@
-from api import app, db
+from init import app, db
 
 #creates the database
 with app.app_context():
