@@ -1,97 +1,34 @@
 from flask import Flask
+from marshmallow.exceptions import ValidationError
 
 from init import  db, ma, bcrypt, jwt
 
 def create_app():
     app = Flask(__name__)
 
-    app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql+psycopg2://"
+    app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql+psycopg2://booky_dev:123456@localhost:5432/booky_db"
+    
+    app.config["JWT_SECRET_KEY"] = "secret"
+
+    db.init_app(app)
+    ma.init_app(app)
+    bcrypt.init_app(app)
+    jwt.init_app(app)
+
+    @app.errorhandler(400)
+    def bad_request(err):
+        return {"error": str(err)}, 400
+    
+    @app.errorhandler(404)
+    def not_found(err):
+        return {"error": str(err)}, 404
+    
+    @app.errorhandler(ValidationError)
+    def validation_error(error):
+        return {"error": error.messages}, 400
     
 
+    return app
 
-# classes id, username, email, boards
 
-#define UserModel class
-class UserModel(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(40), unique= True, nullable=False)
-    email = db.Column(db.String(40), unique=True, nullable=False)
 
-    def __repr__(self) -> str:
-        return f"User(name = {self.username}, email = {self.email})"
-
-#Define request parser
-user_args = reqparse.RequestParser()
-user_args.add_argument('name', type=str, required=True, help = "Name cannot be blank")
-user_args.add_argument('email', type=str, required=True, help = "Email cannot be blank")
-
-userFields = {
-    'id':fields.Integer,
-    'name':fields.String,
-    'email':fields.String,
-}
-
-#Retrieves all users from database
-
-class Users(Resource):
-    @marshal_with(userFields)
-    def get(self):
-        users = UserModel.query.all()
-        return users
-    
-    @marshal_with(userFields)
-    def post(self):
-        args = user_args.parse_args()
-        user = UserModel(name=args["name"], email = args["email"])
-        db.session.add(user)
-        db.session.commit()
-        users = UserModel.query.all()
-        return users, 201
-    
-    #201 means created
-    
-class User(Resource):
-    @marshal_with(userFields)
-    def get(self, id):
-        user = UserModel.query.filter_by(id=id).first()
-        if not user:
-            abort(404, "User not found")
-        return user
-    
-#CRUD
-
-    @marshal_with(userFields)
-    def patch(self, id):
-        args = user_args.parse_args()
-        user = UserModel.query.filter_by(id=id).first()
-        if not user:
-            abort(404, "User not found")
-        user.name = args["name"]    
-        user.email = args["email"]  
-        db.session.commit()  
-        return user
-    
-    @marshal_with(userFields)
-    def delete(self, id):
-        args = user_args.parse_args()
-        user = UserModel.query.filter_by(id=id).first()
-        if not user:
-            abort(404, "User not found")
-        db.session.delete(user)
-        db.session.commit() 
-        users = UserModel.query.all()
-        return user, 204
-        
-    
-
-    
-api.add_resource(Users, '/api/users/')
-api.add_resource(User, '/api/users/<int:id>')
-
-@app.route('/')
-def home():
-    return '<h1>Flask REST API</h1>'
-
-if __name__ == '__main__':
-    app.run(debug=True)
-    
