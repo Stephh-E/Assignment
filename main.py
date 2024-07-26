@@ -21,6 +21,9 @@ def create_app():
     from controllers.cli_controller import db_commands
     app.register_blueprint(db_commands)
 
+    from controllers.auth_controller import auth_bp
+    app.register_blueprint(auth_bp)
+
     @app.errorhandler(400)
     def bad_request(err):
         return {"error": str(err)}, 400
