@@ -32,7 +32,7 @@ class RatingSchema(ma.Schema):
 
     user = fields.Nested('UserSchema', only = ['name', 'email'])
 
-    book = fields.List(fields.Nested('MovieSchema', exclude=['rating']))
+    book = fields.List(fields.Nested('BookSchema', exclude=['rating']))
 
     class Meta:
         fields = ('rating_id', 'rating_date', 'user_rating', 'user', 'books')

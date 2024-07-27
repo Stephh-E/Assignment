@@ -62,8 +62,8 @@ def create_book():
         genre = body_data.get('genre'),
         user_id = get_jwt_identity()
     )
+    
     # Add that to session and commit
-
     db.session.add(book)
     db.session.commit()
     
@@ -77,8 +77,8 @@ def delete_book(book_id):
     # # check user's admin status
     # is_admin = is_user_admin()
     # if not is_admin:
-    #     return {"error": "Not authorised to delete a movie"}, 403
-    # get the movie from the db with id = movie_id
+    #     return {"error": "Not authorised to delete a book"}, 403
+    # get the book from the db with id = book_id
 
     stmt = db.select(Book).where(Book.id == book_id)
     book = db.session.scalar(stmt)
@@ -91,7 +91,6 @@ def delete_book(book_id):
         return {'message': f"Book'{book.title}' deleted successfully"}
     
     else:
-        # return error msg
         return {'error': f"Book with id {book_id} not found"}, 404
     
 # http://localhost:8080/books/5 - PUT, PATCH

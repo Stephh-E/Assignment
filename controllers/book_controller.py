@@ -11,7 +11,7 @@ from models.wishlist import Wishlist
 from controllers.wishlist_controller import wishlists_bp
 from controllers.rating_controller import rating_bp
 
-movies_bp = Blueprint('books', __name__, url_prefix='/books')
+books_bp = Blueprint('books', __name__, url_prefix='/books')
 books_bp.register_blueprint(wishlists_bp)
 
 def authorise_as_admin(fn):
@@ -74,12 +74,12 @@ def create_movie():
 @books_bp.route('/<int:book_id>', methods=["DELETE"])
 @jwt_required()
 @authorise_as_admin
-def book_movie(book_id):
+def delete_book(book_id):
     # # check user's admin status
     # is_admin = is_user_admin()
     # if not is_admin:
     #     return {"error": "Not authorised to delete a book"}, 403
-    # get the bookfrom the db with id = book_id
+    # get the book from the db with id = book_id
     stmt = db.select(Book).where(Book.id == book_id)
     book = db.session.scalar(stmt)
     
@@ -94,7 +94,7 @@ def book_movie(book_id):
 # http://localhost:8080/books/5 - PUT, PATCH
 @books_bp.route('/<int:book_id>', methods=["PUT", "PATCH"])
 @jwt_required()
-def update_movie(book_id):
+def update_book(book_id):
     # Get the data updated from the body of the request
     body_data = book_schema.load(request.get_json(), partial=True)
     # get the book from the db, to be updated
@@ -103,7 +103,7 @@ def update_movie(book_id):
     
     if book:
         if str(book.user_id) != get_jwt_identity():
-            return {"error": "Only the owner can edit the movie"}, 403
+            return {"error": "Only the owner can edit the book"}, 403
         # update the fields
         book.title = body_data.get('title') or book.title
         book.description = body_data.get('description') or book.description
