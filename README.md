@@ -136,7 +136,7 @@ Attributes
 Associations
 Many-to-One with User: Multiple ratings per single user 
 
-Many-to-One with Movie: Multiple ratings can exist for each book.
+Many-to-One with Book: Multiple ratings can exist for each book.
 
 Wishlist Model
 
