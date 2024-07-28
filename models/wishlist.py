@@ -22,9 +22,14 @@ class Wishlist(db.Model):
     #   date
     #}
 
-    user = fields.Nested('UserSchema', only=[ "id", "name", "email"])
+    class WishlistSchema(ma.Schema):
+        user = fields.Nested('UserSchema', only=[ "id", "name", "email"])
 
-    class Meta:
-        fields = ("id", "title", "description", "date", "user")
+        book = fields.Nested('BookSchema', exclude=['wishlist'])
+
+
+        class Meta:
+            fields = ("id", "wishlist_title", "book", "user")
     
     wishlist_schema = WishlistSchema()
+    wishlists_schema = WishlistSchema(many=True)

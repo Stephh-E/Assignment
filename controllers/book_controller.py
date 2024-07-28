@@ -48,13 +48,13 @@ def get_one_book(book_id): # book_id = 4
     if book:
         return book_schema.dump(book)
     else:
-        return {"error": f"Movie with id {book_id} not found"}, 404
+        return {"error": f"Book with id {book_id} not found"}, 404
     
 
 # http://localhost:8080/books - POST
 @books_bp.route('/', methods=["POST"])
 @jwt_required()
-def create_movie():
+def create_book():
     body_data = book_schema.load(request.get_json())
     
     book = Book(

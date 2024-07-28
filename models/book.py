@@ -28,7 +28,7 @@ class BookSchema(ma.Schema):
 
     rating = fields.Nested('RatingSchema', only = ['user_rating'])
 
-    watchlist = fields.List(fields.Nested('WishlistSchema', exclude=['book']))
+    wishlist = fields.List(fields.Nested('WishlistSchema', exclude=['book']))
 
     class Meta:
         fields = ('id', 'book_title', 'description', 'genre', 'rating', 'wishlist')

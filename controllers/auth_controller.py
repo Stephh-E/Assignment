@@ -46,7 +46,6 @@ def auth_login():
     # get the data data from the body of the request
     body_data = request.json()
     #find the user in the db with that email address
-    stmt = db.select(User).filter_by(email=body_data.get("email"))
     user = db.session.scalar(stmt)
     #if user exists and password is correct
     if user and bcrypt.check_password_hash(user.password, body_data.get("password")):

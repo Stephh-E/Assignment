@@ -9,6 +9,8 @@ class User(db.Model):
     password = db.Column(db.String, nullable=False)
     is_admin = db.Column(db.Boolean, default=False)
 
+    wishlist = db.relationship('wishlist', back_populates="user")
+
 class UserSchema(ma.Schema):
     class Meta:
         fields =("id", "name", "email","password", "is_admin")

@@ -34,8 +34,8 @@ def create_app():
     from controllers.book_controller import book_bp
     app.register_blueprint(books_bp)
 
-    from controllers.wishlist_controller import watchlists_bp
-    app.register_blueprint(watchlists_bp)
+    from controllers.wishlist_controller import wishlists_bp
+    app.register_blueprint(wishlists_bp)
 
     from controllers.rating_controller import rating_bp
     app.register_blueprint(rating_bp)

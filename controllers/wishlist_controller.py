@@ -49,4 +49,4 @@ def edit_wishlist(book_id, wishlist_id):
         db.session.commit()
         return wishlist_schema.dump(wishlist)
     else:
-        return {"error": f"Wishlist with id {wishlist_id} not found in movie with id {book_id}"}
+        return {"error": f"Wishlist with id {wishlist_id} not found in book with id {book_id}"}
